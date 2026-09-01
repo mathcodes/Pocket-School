@@ -9,6 +9,7 @@
     "cf:dev": "wrangler pages dev .",
     "cf:d1:local": "wrangler d1 execute pocket-school-feedback --local --file=schema.sql",
     "cf:d1:remote": "wrangler d1 execute pocket-school-feedback --remote --file=schema.sql",
+    "cf:d1:social": "wrangler d1 execute pocket-school-feedback --remote --file=social-schema.sql",
     "cf:deploy": "wrangler pages deploy . --project-name pocket-school"
   },
   "devDependencies": {

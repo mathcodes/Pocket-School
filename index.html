@@ -21,6 +21,7 @@
     <div class="stat" title="Diamonds earned"><span>💎</span><b id="statDiamonds">0</b></div>
     <div class="stat" title="Current answer streak"><span>🔥</span><b id="statStreak">0</b></div>
     <div class="stat" title="Skills mastered"><span>🏅</span><b id="statMastered">0</b></div>
+    <button class="ghost-btn" id="socialTop" title="Player Hub">👥 Players</button>
     <button class="ghost-btn" id="feedbackTop" title="Send feedback">💬 Feedback</button>
     <button class="ghost-btn" id="resetBtn" title="Reset all progress">Reset</button>
   </div>
@@ -108,6 +109,7 @@
     </div>
     <nav class="footer-links" aria-label="Footer">
       <button class="link-btn" id="feedbackLink" type="button">💬 Send feedback</button>
+      <button class="link-btn" id="socialLink" type="button">👥 Player Hub</button>
       <button class="link-btn" id="resourcesLink" type="button">📚 Resources</button>
       <a class="link-btn" id="githubLink" href="#" target="_blank" rel="noopener noreferrer">⭐ GitHub</a>
     <a class="link-btn" target="_blank"  href="mailto:jonpchristie@gmail.com?subject=Pocket%20School%20—%20hello">✉️ Contact</a>
@@ -159,6 +161,30 @@
   </div>
 </div>
 
+<!-- Optional social profile and friends -->
+<div class="modal" id="socialModal" role="dialog" aria-modal="true" aria-labelledby="socialTitle" hidden>
+  <div class="modal-backdrop" data-social-close></div>
+  <div class="modal-card social-card">
+    <div class="modal-head">
+      <h3 id="socialTitle">👥 Player Hub</h3>
+      <button class="icon-btn" type="button" data-social-close aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body" id="socialBody"></div>
+  </div>
+</div>
+
+<!-- Five-question friendly speed battle -->
+<div class="modal" id="battleModal" role="dialog" aria-modal="true" aria-labelledby="battleTitle" hidden>
+  <div class="modal-backdrop" data-battle-close></div>
+  <div class="modal-card battle-card">
+    <div class="modal-head">
+      <h3 id="battleTitle">⚡ Speed Battle</h3>
+      <button class="icon-btn" type="button" data-battle-close aria-label="Leave battle">✕</button>
+    </div>
+    <div class="modal-body" id="battleBody"></div>
+  </div>
+</div>
+
 <!-- Resources dialog -->
 <div class="modal" id="resourcesModal" role="dialog" aria-modal="true" aria-labelledby="resTitle" hidden>
   <div class="modal-backdrop" data-close></div>
@@ -185,6 +211,7 @@
 <script src="js/data-questions-2.js"></script>
 <script src="js/data-questions-3.js"></script>
 <script src="js/store.js"></script>
+<script src="js/social.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

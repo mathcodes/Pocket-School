@@ -572,5 +572,6 @@
   };
 
   initChrome();
+  Social.init();
   renderDashboard();
 })();
