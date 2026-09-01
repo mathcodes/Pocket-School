@@ -163,10 +163,31 @@ export async function onRequestPost(context) {
     const side = battle.inviter_id === current.id ? 'inviter' : 'opponent';
     if (battle[`${side}_score`] !== null) return json({ ok: false, error: 'Battle result already submitted.' }, 409);
     const complete = battle[side === 'inviter' ? 'opponent_score' : 'inviter_score'] !== null;
-    await env.FEEDBACK_DB.prepare(
-      `UPDATE battles SET ${side}_score = ?, ${side}_elapsed_ms = ?, status = ?, completed_at = ? WHERE id = ?`
-    ).bind(data.score, data.elapsedMs, complete ? 'complete' : 'active', complete ? now : null, battleId).run();
-    return json({ ok: true, waiting: !complete });
+    if (!complete) {
+      await env.FEEDBACK_DB.prepare(
+        `UPDATE battles SET ${side}_score = ?, ${side}_elapsed_ms = ? WHERE id = ?`
+      ).bind(data.score, data.elapsedMs, battleId).run();
+      return json({ ok: true, waiting: true });
+    }
+    const inviterScore = side === 'inviter' ? data.score : battle.inviter_score;
+    const inviterElapsed = side === 'inviter' ? data.elapsedMs : battle.inviter_elapsed_ms;
+    const opponentScore = side === 'opponent' ? data.score : battle.opponent_score;
+    const opponentElapsed = side === 'opponent' ? data.elapsedMs : battle.opponent_elapsed_ms;
+    const compare = inviterScore === opponentScore ? inviterElapsed - opponentElapsed : opponentScore - inviterScore;
+    const inviterResult = compare < 0 ? 'win' : compare > 0 ? 'loss' : 'tie';
+    const opponentResult = inviterResult === 'win' ? 'loss' : inviterResult === 'loss' ? 'win' : 'tie';
+    await env.FEEDBACK_DB.batch([
+      env.FEEDBACK_DB.prepare(
+        `INSERT INTO battle_history (id, player_id, opponent_id, result, player_score, opponent_score, player_elapsed_ms, opponent_elapsed_ms, completed_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      ).bind(crypto.randomUUID(), battle.inviter_id, battle.opponent_id, inviterResult, inviterScore, opponentScore, inviterElapsed, opponentElapsed, now),
+      env.FEEDBACK_DB.prepare(
+        `INSERT INTO battle_history (id, player_id, opponent_id, result, player_score, opponent_score, player_elapsed_ms, opponent_elapsed_ms, completed_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      ).bind(crypto.randomUUID(), battle.opponent_id, battle.inviter_id, opponentResult, opponentScore, inviterScore, opponentElapsed, inviterElapsed, now),
+      env.FEEDBACK_DB.prepare('DELETE FROM battles WHERE id = ?').bind(battleId)
+    ]);
+    return json({ ok: true, waiting: false });
   }
 
   return json({ ok: false, error: 'Unknown action.' }, 404);
@@ -204,13 +225,40 @@ export async function onRequestGet(context) {
     return json({ ok: true, history: results.reverse() });
   }
 
+  if (action === 'battle-history') {
+    const { results } = await env.FEEDBACK_DB.prepare(
+      `SELECT h.result, h.player_score, h.opponent_score, h.player_elapsed_ms, h.opponent_elapsed_ms, h.completed_at, p.display_name
+       FROM battle_history h JOIN players p ON p.id = h.opponent_id
+       WHERE h.player_id = ? ORDER BY h.completed_at DESC LIMIT 30`
+    ).bind(current.id).all();
+    return json({ ok: true, history: results.map((item) => ({
+      result: item.result,
+      playerScore: item.player_score,
+      opponentScore: item.opponent_score,
+      playerElapsedMs: item.player_elapsed_ms,
+      opponentElapsedMs: item.opponent_elapsed_ms,
+      completedAt: item.completed_at,
+      opponentName: item.display_name
+    })) });
+  }
+
+  if (action === 'rankings') {
+    const { results } = await env.FEEDBACK_DB.prepare(
+      `SELECT id, display_name, overall_score, mastered_count, updated_at FROM players
+       WHERE public_opt_in = 1 ORDER BY overall_score DESC, mastered_count DESC, updated_at ASC LIMIT 50`
+    ).all();
+    return json({ ok: true, players: results.map((player, index) => ({ ...profile(player), rank: index + 1 })) });
+  }
+
   if (action === 'battles') {
     const now = Date.now();
-    await env.FEEDBACK_DB.prepare("UPDATE battles SET status = 'expired' WHERE status = 'pending' AND expires_at < ?").bind(now).run();
+    await env.FEEDBACK_DB.prepare(
+      "DELETE FROM battles WHERE status = 'declined' OR ((status = 'pending' OR status = 'active') AND expires_at < ?)"
+    ).bind(now).run();
     const { results } = await env.FEEDBACK_DB.prepare(
       `SELECT b.*, i.display_name AS inviter_name, o.display_name AS opponent_name
        FROM battles b JOIN players i ON i.id = b.inviter_id JOIN players o ON o.id = b.opponent_id
-       WHERE b.inviter_id = ? OR b.opponent_id = ? ORDER BY b.created_at DESC LIMIT 25`
+      WHERE (b.inviter_id = ? OR b.opponent_id = ?) AND (b.status = 'pending' OR b.status = 'active') ORDER BY b.created_at DESC LIMIT 25`
     ).bind(current.id, current.id).all();
     return json({ ok: true, battles: results.map((b) => ({
       id: b.id, status: b.status, seed: b.question_seed, createdAt: b.created_at, startedAt: b.started_at, expiresAt: b.expires_at,

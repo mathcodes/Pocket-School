@@ -55,3 +55,18 @@ CREATE TABLE IF NOT EXISTS battles (
 
 CREATE INDEX IF NOT EXISTS battles_player_idx
   ON battles (inviter_id, opponent_id, status, created_at DESC);
+
+CREATE TABLE IF NOT EXISTS battle_history (
+  id TEXT PRIMARY KEY,
+  player_id TEXT NOT NULL,
+  opponent_id TEXT NOT NULL,
+  result TEXT NOT NULL CHECK (result IN ('win', 'loss', 'tie')),
+  player_score INTEGER NOT NULL,
+  opponent_score INTEGER NOT NULL,
+  player_elapsed_ms INTEGER NOT NULL,
+  opponent_elapsed_ms INTEGER NOT NULL,
+  completed_at INTEGER NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS battle_history_player_idx
+  ON battle_history (player_id, completed_at DESC);

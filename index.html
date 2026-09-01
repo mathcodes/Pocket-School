@@ -29,6 +29,27 @@
 
 <main id="app"></main>
 
+<!-- First-visit account choice -->
+<div class="login-gate" id="loginGate" hidden>
+  <section class="login-panel" aria-labelledby="loginTitle">
+    <span class="login-ball">🎱</span>
+    <p class="login-kicker">Pocket School</p>
+    <h2 id="loginTitle">Play your way</h2>
+    <p class="muted">Create a player account to save an optional shared profile, meet players near your score,
+      and challenge friends. You can also train privately as a guest.</p>
+    <button class="primary-btn login-create" id="loginCreate">Create player account</button>
+    <button class="guest-btn" id="loginGuest">Continue as guest</button>
+    <div class="login-divider"><span>or continue with</span></div>
+    <div class="provider-grid">
+      <button class="provider-btn" data-provider="Google" type="button"><span>G</span> Google</button>
+      <button class="provider-btn" data-provider="Microsoft" type="button"><span>▣</span> Microsoft</button>
+      <button class="provider-btn" data-provider="Apple" type="button"><span>●</span> Apple</button>
+      <button class="provider-btn" data-provider="Facebook" type="button"><span>f</span> Facebook</button>
+    </div>
+    <p class="login-note" id="loginNote">Social sign-in is being configured. Create a player account to use the Player Hub today.</p>
+  </section>
+</div>
+
 <!-- Dashboard template -->
 <template id="tpl-dashboard">
   <section class="dash">

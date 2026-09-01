@@ -62,7 +62,29 @@
     document.getElementById('socialTop').onclick = openHub;
     document.getElementById('socialLink').onclick = openHub;
     document.querySelectorAll('[data-social-close], [data-battle-close]').forEach((button) => button.onclick = closeAll);
+    document.getElementById('loginCreate').onclick = () => {
+      dismissLogin();
+      openHub();
+    };
+    document.getElementById('loginGuest').onclick = dismissLogin;
+    document.querySelectorAll('[data-provider]').forEach((button) => {
+      button.onclick = () => {
+        document.getElementById('loginNote').textContent = `${button.dataset.provider} sign-in needs that provider's OAuth app configuration. Create a player account to use the Player Hub today.`;
+      };
+    });
     document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeAll(); });
+    if (!savedProfile() && !sessionStorage.getItem('pocket-school.guest-session')) showLogin();
+  }
+
+  function showLogin() {
+    document.getElementById('loginGate').hidden = false;
+    document.body.classList.add('modal-open');
+  }
+
+  function dismissLogin() {
+    document.getElementById('loginGate').hidden = true;
+    document.body.classList.remove('modal-open');
+    sessionStorage.setItem('pocket-school.guest-session', '1');
   }
 
   function openHub() {
@@ -110,13 +132,13 @@
       const updated = await api('profile', { method: 'POST', body: JSON.stringify({ displayName: state.profile.displayName, publicOptIn: state.profile.publicOptIn, ...p }) });
       state.profile = updated.player;
       localStorage.setItem(PROFILE_KEY, JSON.stringify(state.profile));
-      const [nearby, friends, battles, history] = await Promise.all([api('nearby'), api('friends'), api('battles'), api('history')]);
+      const [nearby, friends, battles, history, rankings] = await Promise.all([api('nearby'), api('friends'), api('battles'), api('history'), api('rankings')]);
       state.battles = battles.battles;
-      renderHub(nearby.players, friends.friends, history.history);
+      renderHub(nearby.players, friends.friends, history.history, rankings.players);
     } catch (error) { renderEnroll(error.message); }
   }
 
-  function renderHub(players, friends, history) {
+  function renderHub(players, friends, history, rankings) {
     const p = state.profile;
     const view = state.hub;
     const pending = friends.filter((item) => item.relation === 'incoming').length;
@@ -129,15 +151,17 @@
       </div>
       <div class="social-tabs">
         <button class="${view === 'nearby' ? 'active' : ''}" data-tab="nearby">Nearby</button>
+        <button class="${view === 'rankings' ? 'active' : ''}" data-tab="rankings">Top Players</button>
         <button class="${view === 'friends' ? 'active' : ''}" data-tab="friends">Friends${pending ? ` (${pending})` : ''}</button>
         <button class="${view === 'battles' ? 'active' : ''}" data-tab="battles">Battles</button>
         <button class="${view === 'history' ? 'active' : ''}" data-tab="history">History</button>
       </div>
       <div id="socialPanel"></div>`;
-    body.querySelectorAll('[data-tab]').forEach((button) => button.onclick = () => { state.hub = button.dataset.tab; renderHub(players, friends, history); });
+    body.querySelectorAll('[data-tab]').forEach((button) => button.onclick = () => { state.hub = button.dataset.tab; renderHub(players, friends, history, rankings); });
     document.getElementById('editProfile').onclick = () => renderEdit();
     const panel = document.getElementById('socialPanel');
     if (view === 'nearby') renderNearby(panel, players);
+    if (view === 'rankings') renderRankings(panel, rankings);
     if (view === 'friends') renderFriends(panel, friends);
     if (view === 'battles') renderBattles(panel);
     if (view === 'history') renderHistory(panel, history);
@@ -181,15 +205,20 @@
 
   function renderBattles(panel) {
     const battles = state.battles.filter((battle) => !['declined', 'expired'].includes(battle.status));
-    panel.innerHTML = battles.length ? battles.map((battle) => {
+    panel.innerHTML = `${battles.length ? battles.map((battle) => {
       let action = '';
       if (battle.status === 'pending') action = `<button class="link-btn compact" data-join="${battle.id}">Accept</button>`;
       if (battle.status === 'active' && battle.mine.score === null) action = `<button class="link-btn compact" data-play="${battle.id}">Play now</button>`;
       const score = battle.status === 'complete' ? `You ${battle.mine.score}/5 · ${battle.opponent.displayName} ${battle.theirs.score}/5` : battle.status === 'active' ? 'Battle in progress' : 'Awaiting response';
       return `<div class="battle-row"><div><b>vs. ${esc(battle.opponent.displayName)}</b><span>${score}</span></div>${action}</div>`;
-    }).join('') : '<p class="social-empty">No battle invites. Add a friend, then challenge them from the Friends tab.</p>';
+    }).join('') : '<p class="social-empty">No active battle invites. Add a friend, then challenge them from the Friends tab.</p>'}<button class="history-trigger" id="battleHistory">View battle history</button>`;
     panel.querySelectorAll('[data-join]').forEach((button) => button.onclick = () => respondBattle(button.dataset.join, true));
     panel.querySelectorAll('[data-play]').forEach((button) => button.onclick = () => launchBattle(state.battles.find((battle) => battle.id === button.dataset.play)));
+    document.getElementById('battleHistory').onclick = showBattleHistory;
+  }
+
+  function renderRankings(panel, rankings) {
+    panel.innerHTML = rankings.length ? rankings.map((player) => `<div class="player-row ranking-row ${player.id === state.profile.id ? 'is-me' : ''}"><strong>#${player.rank}</strong><span class="player-avatar small">${esc(player.displayName.slice(0, 1).toUpperCase())}</span><div><b>${esc(player.displayName)}${player.id === state.profile.id ? ' (you)' : ''}</b><span>${player.mastered} mastered</span></div><strong>${player.score}</strong></div>`).join('') : '<p class="social-empty">Top Players will appear as members opt into public profiles.</p>';
   }
 
   function renderHistory(panel, history) {
@@ -201,6 +230,18 @@
     const latest = history[history.length - 1];
     const change = latest.score - first.score;
     panel.innerHTML = `<div class="history-summary"><b>${latest.score}</b><span>Latest SmartScore</span><strong class="${change >= 0 ? 'positive' : 'negative'}">${change >= 0 ? '+' : ''}${change} since first snapshot</strong></div><div class="history-list">${history.slice().reverse().map((entry) => `<div><span>${esc(entry.snapshotDate)}</span><b>${entry.score}</b><small>${entry.mastered} mastered</small></div>`).join('')}</div>`;
+  }
+
+  async function showBattleHistory() {
+    try {
+      const data = await api('battle-history');
+      const wins = data.history.filter((item) => item.result === 'win').length;
+      const losses = data.history.filter((item) => item.result === 'loss').length;
+      const ties = data.history.filter((item) => item.result === 'tie').length;
+      const panel = document.getElementById('socialPanel');
+      panel.innerHTML = `<div class="history-summary"><b>${wins}–${losses}${ties ? `–${ties}` : ''}</b><span>Wins – losses${ties ? ' – ties' : ''}</span></div>${data.history.length ? `<div class="history-list">${data.history.map((item) => `<div><span>${esc(item.opponentName)}</span><b class="${item.result}">${item.result.toUpperCase()}</b><small>${item.playerScore}/5 · ${(item.playerElapsedMs / 1000).toFixed(1)}s</small></div>`).join('')}</div>` : '<p class="social-empty">No completed battles yet. Completed duels automatically move here.</p>'}<button class="history-trigger" id="backToBattles">Back to battles</button>`;
+      document.getElementById('backToBattles').onclick = () => { state.hub = 'battles'; refreshHub(); };
+    } catch (error) { alert(error.message); }
   }
 
   async function requestFriend(playerId) { try { await api('friends/request', { method: 'POST', body: JSON.stringify({ playerId }) }); refreshHub(); } catch (error) { alert(error.message); } }

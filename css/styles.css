@@ -17,6 +17,7 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  overscroll-behavior-x: none;
 }
 
 body {
@@ -29,6 +30,7 @@ body {
     var(--felt-2);
   background-attachment: fixed;
   min-height: 100vh;
+  min-height: 100dvh;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
@@ -36,6 +38,22 @@ body {
 }
 
 body.modal-open { overflow: hidden; }
+
+.login-gate { position: fixed; z-index: 40; inset: 0; display: grid; place-items: center; padding: 24px; overflow-y: auto; background: rgba(4, 29, 21, .92); backdrop-filter: blur(10px); }
+.login-gate[hidden] { display: none; }
+.login-panel { width: min(470px, 100%); display: grid; gap: 13px; text-align: center; padding: 30px; border: 1px solid var(--line); border-radius: 18px; background: linear-gradient(160deg, var(--card-2), var(--card)); box-shadow: 0 28px 80px rgba(0,0,0,.45); }
+.login-ball { font-size: 3rem; }
+.login-kicker { color: var(--gold); font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .9px; }
+.login-panel h2 { font-size: 1.55rem; }
+.login-panel .muted { line-height: 1.55; }
+.login-create { width: 100%; }
+.guest-btn { min-height: 42px; border: 0; color: var(--muted); background: transparent; text-decoration: underline; }
+.login-divider { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: .76rem; }
+.login-divider::before, .login-divider::after { content: ''; height: 1px; flex: 1; background: var(--line); }
+.provider-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.provider-btn { min-height: 44px; color: var(--ink); background: rgba(255,255,255,.06); border: 1px solid var(--line); border-radius: 10px; font-weight: 600; }
+.provider-btn span { display: inline-grid; width: 19px; place-items: center; color: var(--gold); }
+.login-note { min-height: 2.5em; color: var(--muted); font-size: .75rem; line-height: 1.45; }
 
 h1, h2, h3, h4 { margin: 0; line-height: 1.25; overflow-wrap: anywhere; }
 p { margin: 0; }
@@ -74,6 +92,10 @@ p { margin: 0; }
 /* ---------- buttons ---------- */
 button { font: inherit; cursor: pointer; touch-action: manipulation; }
 a { color: var(--gold); }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
 .primary-btn {
   background: var(--gold); color: #221a05; border: 0;
   padding: 12px 20px; border-radius: 12px; font-weight: 650; min-height: 44px;
@@ -254,7 +276,7 @@ main {
 .modal-head, .modal-foot { padding: 16px 20px; display: flex; align-items: center; gap: 10px; }
 .modal-head { border-bottom: 1px solid var(--line); justify-content: space-between; }
 .modal-foot { border-top: 1px solid var(--line); justify-content: flex-end; flex-wrap: wrap; }
-.modal-body { padding: 18px 20px; overflow-y: auto; -webkit-overflow-scrolling: touch; display: grid; gap: 8px; }
+.modal-body { padding: 18px 20px; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; display: grid; gap: 8px; }
 .modal-body label { font-size: 0.8rem; color: var(--muted); margin-top: 6px; }
 .modal-body input, .modal-body select, .modal-body textarea {
   width: 100%; font: inherit; font-size: 16px; color: var(--ink);
@@ -285,7 +307,7 @@ main {
 .player-avatar { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; flex: 0 0 auto; color: #211705; background: var(--gold); font-weight: 750; }
 .player-avatar.small { width: 35px; height: 35px; font-size: 0.8rem; }
 .compact { min-height: 34px; padding: 5px 9px; white-space: nowrap; }
-.social-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; padding: 4px; background: rgba(255,255,255,.05); border-radius: 10px; }
+.social-tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; padding: 4px; background: rgba(255,255,255,.05); border-radius: 10px; }
 .social-tabs button { border: 0; border-radius: 7px; min-height: 38px; color: var(--muted); background: transparent; font-size: 0.8rem; }
 .social-tabs button.active { color: var(--ink); background: rgba(255,255,255,.12); }
 #socialPanel { display: grid; gap: 8px; margin-top: 14px; }
@@ -306,6 +328,13 @@ main {
 .history-list { display: grid; gap: 6px; }
 .history-list > div { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: baseline; padding: 9px 11px; border-bottom: 1px solid var(--line); }
 .history-list span, .history-list small { color: var(--muted); font-size: 0.75rem; }
+.history-list .win { color: var(--good); }
+.history-list .loss { color: var(--bad); }
+.history-list .tie { color: var(--gold); }
+.history-trigger { width: 100%; min-height: 42px; color: var(--muted); background: transparent; border: 1px dashed var(--line); border-radius: 10px; }
+.ranking-row > strong:first-child { width: 28px; color: var(--gold); text-align: center; }
+.ranking-row > strong:last-child { color: var(--gold); font-size: 1.1rem; }
+.ranking-row.is-me { border-color: rgba(242, 177, 52, .5); background: rgba(242, 177, 52, .08); }
 
 .fb-fallback {
   margin-top: 12px; padding: 12px; border-radius: 12px;
@@ -367,12 +396,17 @@ main {
   .qmeta { flex-wrap: wrap; gap: 6px; }
   .done-stats div { flex: 1 1 40%; padding: 12px; }
   .modal { padding: 0; align-items: flex-end; }
+  .login-gate { place-items: end center; padding: 0; }
+  .login-panel { border-radius: 18px 18px 0 0; padding: 25px 20px calc(25px + env(safe-area-inset-bottom)); }
   .modal-card { width: 100%; max-height: 92vh; border-radius: 18px 18px 0 0; }
   .modal-foot { justify-content: stretch; }
   .modal-foot button { flex: 1; }
   .player-row, .battle-row { flex-wrap: wrap; }
   .player-row > .compact, .battle-row > .compact { margin-left: auto; }
   .score-gap { margin-left: 44px; }
+  .social-tabs { grid-template-columns: repeat(3, 1fr); }
+  .social-tabs button { font-size: 0.76rem; min-height: 42px; }
+  .history-list > div { gap: 8px; padding: 10px 4px; }
   .site-footer { padding: 22px 16px calc(22px + env(safe-area-inset-bottom)); }
   .footer-links { width: 100%; }
   .link-btn { flex: 1 1 45%; justify-content: center; }
@@ -381,4 +415,8 @@ main {
 
 @media (max-width: 430px) {
   .brand h1 { display: none; }
+  #socialTop { display: none; }
+  .social-tabs { grid-template-columns: repeat(2, 1fr); }
+  .player-row { align-items: flex-start; }
+  .ranking-row > strong:last-child { margin-left: auto; }
 }
