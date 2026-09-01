@@ -1,4 +1,4 @@
-name: Deploy Pocket School
+name: Deploy Pool Shark
 
 on:
   push:

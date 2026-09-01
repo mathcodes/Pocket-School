@@ -262,6 +262,7 @@ export async function onRequestGet(context) {
     ).bind(current.id, current.id).all();
     return json({ ok: true, battles: results.map((b) => ({
       id: b.id, status: b.status, seed: b.question_seed, createdAt: b.created_at, startedAt: b.started_at, expiresAt: b.expires_at,
+      role: b.inviter_id === current.id ? 'inviter' : 'opponent',
       opponent: b.inviter_id === current.id ? { id: b.opponent_id, displayName: b.opponent_name } : { id: b.inviter_id, displayName: b.inviter_name },
       mine: b.inviter_id === current.id ? { score: b.inviter_score, elapsedMs: b.inviter_elapsed_ms } : { score: b.opponent_score, elapsedMs: b.opponent_elapsed_ms },
       theirs: b.inviter_id === current.id ? { score: b.opponent_score, elapsedMs: b.opponent_elapsed_ms } : { score: b.inviter_score, elapsedMs: b.inviter_elapsed_ms }

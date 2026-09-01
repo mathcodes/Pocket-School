@@ -1,4 +1,4 @@
-/* Pocket School — view routing, quiz engine, and rendering. */
+/* Pool Shark — view routing, quiz engine, and rendering. */
 (function () {
   const app = document.getElementById('app');
   const skillById = Object.fromEntries(BQ.skills.map((s) => [s.id, s]));
@@ -384,7 +384,7 @@
     // mailto URLs are truncated by many clients past ~2000 characters
     const trimmed = message.length > 1200 ? message.slice(0, 1200) + '… (truncated)' : message;
     const body = [trimmed || '(no message entered)', '', '---', context, `From: ${name || 'anonymous'}`, meta].join('\n');
-    return { topic, name, message, context, meta, subject: `Pocket School feedback — ${topic}`, body };
+    return { topic, name, message, context, meta, subject: `Pool Shark feedback — ${topic}`, body };
   }
 
   function setFbStatus(text, kind) {

@@ -1,7 +1,7 @@
 {
-  "name": "pocket-school-billiards",
+  "name": "pool-shark-billiards",
   "version": "1.0.0",
-  "description": "Adaptive billiards training app with an IXL-style SmartScore.",
+  "description": "Pool Shark: adaptive billiards training with an IXL-style SmartScore.",
   "private": true,
   "scripts": {
     "start": "node server.js",

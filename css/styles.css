@@ -39,22 +39,6 @@ body {
 
 body.modal-open { overflow: hidden; }
 
-.login-gate { position: fixed; z-index: 40; inset: 0; display: grid; place-items: center; padding: 24px; overflow-y: auto; background: rgba(4, 29, 21, .92); backdrop-filter: blur(10px); }
-.login-gate[hidden] { display: none; }
-.login-panel { width: min(470px, 100%); display: grid; gap: 13px; text-align: center; padding: 30px; border: 1px solid var(--line); border-radius: 18px; background: linear-gradient(160deg, var(--card-2), var(--card)); box-shadow: 0 28px 80px rgba(0,0,0,.45); }
-.login-ball { font-size: 3rem; }
-.login-kicker { color: var(--gold); font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .9px; }
-.login-panel h2 { font-size: 1.55rem; }
-.login-panel .muted { line-height: 1.55; }
-.login-create { width: 100%; }
-.guest-btn { min-height: 42px; border: 0; color: var(--muted); background: transparent; text-decoration: underline; }
-.login-divider { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: .76rem; }
-.login-divider::before, .login-divider::after { content: ''; height: 1px; flex: 1; background: var(--line); }
-.provider-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.provider-btn { min-height: 44px; color: var(--ink); background: rgba(255,255,255,.06); border: 1px solid var(--line); border-radius: 10px; font-weight: 600; }
-.provider-btn span { display: inline-grid; width: 19px; place-items: center; color: var(--gold); }
-.login-note { min-height: 2.5em; color: var(--muted); font-size: .75rem; line-height: 1.45; }
-
 h1, h2, h3, h4 { margin: 0; line-height: 1.25; overflow-wrap: anywhere; }
 p { margin: 0; }
 .muted { color: var(--muted); font-size: 0.9rem; }
@@ -300,6 +284,7 @@ main {
 .check-row { display: flex; align-items: center; gap: 9px; color: var(--ink) !important; }
 .check-row input { width: 19px !important; height: 19px; accent-color: var(--gold); }
 .social-privacy { font-size: 0.78rem; color: var(--muted); line-height: 1.45; }
+.profile-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 6px; }
 .player-summary { display: flex; align-items: center; gap: 10px; padding: 4px 0 12px; }
 .player-summary > div:nth-child(2), .player-row > div, .battle-row > div { min-width: 0; flex: 1; display: grid; gap: 2px; }
 .player-summary b, .player-row b, .battle-row b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -396,14 +381,13 @@ main {
   .qmeta { flex-wrap: wrap; gap: 6px; }
   .done-stats div { flex: 1 1 40%; padding: 12px; }
   .modal { padding: 0; align-items: flex-end; }
-  .login-gate { place-items: end center; padding: 0; }
-  .login-panel { border-radius: 18px 18px 0 0; padding: 25px 20px calc(25px + env(safe-area-inset-bottom)); }
   .modal-card { width: 100%; max-height: 92vh; border-radius: 18px 18px 0 0; }
   .modal-foot { justify-content: stretch; }
   .modal-foot button { flex: 1; }
   .player-row, .battle-row { flex-wrap: wrap; }
   .player-row > .compact, .battle-row > .compact { margin-left: auto; }
   .score-gap { margin-left: 44px; }
+  .profile-actions button { flex: 1; }
   .social-tabs { grid-template-columns: repeat(3, 1fr); }
   .social-tabs button { font-size: 0.76rem; min-height: 42px; }
   .history-list > div { gap: 8px; padding: 10px 4px; }

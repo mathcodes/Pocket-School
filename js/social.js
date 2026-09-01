@@ -62,29 +62,7 @@
     document.getElementById('socialTop').onclick = openHub;
     document.getElementById('socialLink').onclick = openHub;
     document.querySelectorAll('[data-social-close], [data-battle-close]').forEach((button) => button.onclick = closeAll);
-    document.getElementById('loginCreate').onclick = () => {
-      dismissLogin();
-      openHub();
-    };
-    document.getElementById('loginGuest').onclick = dismissLogin;
-    document.querySelectorAll('[data-provider]').forEach((button) => {
-      button.onclick = () => {
-        document.getElementById('loginNote').textContent = `${button.dataset.provider} sign-in needs that provider's OAuth app configuration. Create a player account to use the Player Hub today.`;
-      };
-    });
     document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeAll(); });
-    if (!savedProfile() && !sessionStorage.getItem('pocket-school.guest-session')) showLogin();
-  }
-
-  function showLogin() {
-    document.getElementById('loginGate').hidden = false;
-    document.body.classList.add('modal-open');
-  }
-
-  function dismissLogin() {
-    document.getElementById('loginGate').hidden = true;
-    document.body.classList.remove('modal-open');
-    sessionStorage.setItem('pocket-school.guest-session', '1');
   }
 
   function openHub() {
@@ -112,6 +90,24 @@
     document.getElementById('createProfile').onclick = createProfile;
   }
 
+  function renderEdit(error = '') {
+    const p = state.profile;
+    document.getElementById('socialBody').innerHTML = `
+      <div class="social-intro">
+        <span class="social-hero">🎱</span>
+        <h4>Edit player profile</h4>
+        <p class="muted">Your progress stays on this device. You control whether other Pool Shark players can discover your profile.</p>
+      </div>
+      <label for="playerName">Display name</label>
+      <input id="playerName" maxlength="24" autocomplete="nickname" value="${esc(p.displayName)}" />
+      <label class="check-row"><input id="publicProfile" type="checkbox" ${p.publicOptIn ? 'checked' : ''} /> Let nearby players find my score</label>
+      <p class="social-privacy">Only your chosen name, overall SmartScore, and mastered-skill count are shared when discovery is enabled.</p>
+      ${error ? `<p class="fb-status warn">${esc(error)}</p>` : ''}
+      <div class="profile-actions"><button class="secondary-btn" id="cancelProfile">Cancel</button><button class="primary-btn" id="saveProfile">Save changes</button></div>`;
+    document.getElementById('cancelProfile').onclick = refreshHub;
+    document.getElementById('saveProfile').onclick = createProfile;
+  }
+
   async function createProfile() {
     const displayName = document.getElementById('playerName').value.trim();
     if (!displayName) return renderEnroll('Choose a display name to continue.');
@@ -121,7 +117,7 @@
       state.profile = data.player;
       localStorage.setItem(PROFILE_KEY, JSON.stringify(data.player));
       refreshHub();
-    } catch (error) { renderEnroll(error.message); }
+    } catch (error) { state.profile ? renderEdit(error.message) : renderEnroll(error.message); }
   }
 
   async function refreshHub() {
@@ -207,9 +203,11 @@
     const battles = state.battles.filter((battle) => !['declined', 'expired'].includes(battle.status));
     panel.innerHTML = `${battles.length ? battles.map((battle) => {
       let action = '';
-      if (battle.status === 'pending') action = `<button class="link-btn compact" data-join="${battle.id}">Accept</button>`;
+      if (battle.status === 'pending') action = battle.role === 'opponent'
+        ? `<button class="link-btn compact" data-join="${battle.id}">Accept</button>`
+        : '<span class="social-state">Challenge sent</span>';
       if (battle.status === 'active' && battle.mine.score === null) action = `<button class="link-btn compact" data-play="${battle.id}">Play now</button>`;
-      const score = battle.status === 'complete' ? `You ${battle.mine.score}/5 · ${battle.opponent.displayName} ${battle.theirs.score}/5` : battle.status === 'active' ? 'Battle in progress' : 'Awaiting response';
+      const score = battle.status === 'complete' ? `You ${battle.mine.score}/5 · ${battle.opponent.displayName} ${battle.theirs.score}/5` : battle.status === 'active' ? 'Battle in progress' : battle.role === 'opponent' ? 'Challenge waiting for you' : 'Awaiting their response';
       return `<div class="battle-row"><div><b>vs. ${esc(battle.opponent.displayName)}</b><span>${score}</span></div>${action}</div>`;
     }).join('') : '<p class="social-empty">No active battle invites. Add a friend, then challenge them from the Friends tab.</p>'}<button class="history-trigger" id="battleHistory">View battle history</button>`;
     panel.querySelectorAll('[data-join]').forEach((button) => button.onclick = () => respondBattle(button.dataset.join, true));

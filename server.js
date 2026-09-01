@@ -1,4 +1,4 @@
-/* Zero-dependency static server + feedback collector for Pocket School.
+/* Zero-dependency static server + feedback collector for Pool Shark.
    Run: node server.js   (then open http://localhost:8080) */
 const http = require('http');
 const fs = require('fs');
@@ -202,6 +202,6 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`Pocket School running at http://localhost:${PORT}`);
+  console.log(`Pool Shark running at http://localhost:${PORT}`);
   console.log(`Feedback is appended to ${path.relative(ROOT, FEEDBACK_FILE)}`);
 });

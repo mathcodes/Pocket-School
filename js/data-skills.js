@@ -1,4 +1,4 @@
-/* Skill map for the Pocket School billiards trainer.
+/* Skill map for the Pool Shark billiards trainer.
    Structure mirrors an IXL-style curriculum: levels -> strands -> skills. */
 window.BQ = window.BQ || { skills: [], questions: {} };
 
