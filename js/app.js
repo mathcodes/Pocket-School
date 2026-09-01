@@ -451,7 +451,7 @@
   }
 
   /* Unsent feedback is kept locally so nothing is lost on static hosting. */
-  const QUEUE_KEY = 'pocketschool.feedback.queue.v1';
+  const QUEUE_KEY = 'pocket-school-feedback.feedback.queue.v1';
 
   function readQueue() {
     try {

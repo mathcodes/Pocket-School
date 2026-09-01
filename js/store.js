@@ -1,6 +1,6 @@
 /* Progress persistence + the SmartScore engine. */
 (function () {
-  const KEY = 'pocketschool.progress.v1';
+  const KEY = 'pocket-school-feedback.progress.v1';
 
   const blankSkill = () => ({ score: 0, best: 0, answered: 0, correct: 0, mastered: false });
 

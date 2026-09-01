@@ -1,0 +1,13 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "pocket-school",
+	"compatibility_date": "2026-09-01",
+	"pages_build_output_dir": ".",
+	"d1_databases": [
+		{
+			"binding": "FEEDBACK_DB",
+			"database_name": "pocket-school-feedback",
+			"database_id": "affe7826-32be-4b4f-a538-4932f33d1281"
+		}
+	]
+}

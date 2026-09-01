@@ -5,8 +5,17 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "feedback": "node -e \"const f=require('./data/feedback.json');console.log(f.length+' entries');f.forEach(e=>console.log('\\n['+e.receivedAt+'] '+e.topic+' — '+(e.name||'anonymous')+'\\n'+e.message+'\\n'+e.context))\""
+    "feedback": "node -e \"const f=require('./data/feedback.json');console.log(f.length+' entries');f.forEach(e=>console.log('\\n['+e.receivedAt+'] '+e.topic+' — '+(e.name||'anonymous')+'\\n'+e.message+'\\n'+e.context))\"",
+    "cf:dev": "wrangler pages dev .",
+    "cf:d1:local": "wrangler d1 execute pocket-school-feedback --local --file=schema.sql",
+    "cf:d1:remote": "wrangler d1 execute pocket-school-feedback --remote --file=schema.sql",
+    "cf:deploy": "wrangler pages deploy . --project-name pocket-school"
   },
-  "engines": { "node": ">=18" },
+  "devDependencies": {
+    "wrangler": "^4.127.1"
+  },
+  "engines": {
+    "node": ">=22"
+  },
   "license": "UNLICENSED"
 }
