@@ -278,6 +278,7 @@ main {
 
 /* ---------- player hub ---------- */
 .social-card, .battle-card { max-width: 620px; }
+.social-card .modal-body, .battle-card .modal-body, #socialPanel { min-width: 0; }
 .social-intro { text-align: center; display: grid; gap: 8px; margin: 4px 0 8px; }
 .social-intro h4, .battle-question { font-size: 1.1rem; }
 .social-hero { font-size: 2.5rem; }
@@ -293,7 +294,7 @@ main {
 .player-avatar.small { width: 35px; height: 35px; font-size: 0.8rem; }
 .compact { min-height: 34px; padding: 5px 9px; white-space: nowrap; }
 .social-tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; padding: 4px; background: rgba(255,255,255,.05); border-radius: 10px; }
-.social-tabs button { border: 0; border-radius: 7px; min-height: 38px; color: var(--muted); background: transparent; font-size: 0.8rem; }
+.social-tabs button { min-width: 0; border: 0; border-radius: 7px; min-height: 38px; color: var(--muted); background: transparent; font-size: 0.8rem; overflow-wrap: anywhere; }
 .social-tabs button.active { color: var(--ink); background: rgba(255,255,255,.12); }
 #socialPanel { display: grid; gap: 8px; margin-top: 14px; }
 .player-row, .battle-row { display: flex; align-items: center; gap: 9px; padding: 10px; border: 1px solid var(--line); border-radius: 12px; }
