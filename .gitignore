@@ -1,0 +1,4 @@
+node_modules/
+data/feedback.json
+data/feedback.json.tmp
+.DS_Store

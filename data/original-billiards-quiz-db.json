@@ -1,0 +1,279 @@
+{
+  "quizTitle": "Billiards Mastery Quiz",
+  "description": "A local fact-and-question bank for a scored billiards trivia app, organized into 7 core topics with three difficulty tiers each.",
+  "topics": [
+    {
+      "id": "cue-ball",
+      "name": "Cue Ball",
+      "color": "White",
+      "concept": "Strategy / The Break",
+      "nickname": "The Opener",
+      "association": "Foresight, shot planning",
+      "facts": [
+        { "difficulty": "easy", "text": "The cue ball is the only ball on the table without a number, and it's the one you strike with the cue stick." },
+        { "difficulty": "medium", "text": "A 'scratch' occurs when the cue ball is pocketed or forced off the table." },
+        { "difficulty": "hard", "text": "'Position play' is the practice of controlling where the cue ball stops after a shot, setting up the next shot in a sequence called a 'run.'" }
+      ],
+      "questions": [
+        {
+          "id": "cue-ball-e1",
+          "difficulty": "easy",
+          "question": "What is a 'scratch' in billiards?",
+          "options": ["Pocketing the cue ball or knocking it off the table", "Missing every ball on the table", "Hitting the cue ball twice", "Chalking the cue tip incorrectly"],
+          "correctAnswer": "Pocketing the cue ball or knocking it off the table",
+          "explanation": "A scratch is a foul where the cue ball itself ends up pocketed or leaves the table."
+        },
+        {
+          "id": "cue-ball-m1",
+          "difficulty": "medium",
+          "question": "What is 'position play'?",
+          "options": ["Racking the balls in a specific pattern", "Controlling where the cue ball stops to set up the next shot", "Calling your shot before hitting", "Standing in a specific spot at the table"],
+          "correctAnswer": "Controlling where the cue ball stops to set up the next shot",
+          "explanation": "Skilled players plan not just the current shot but where the cue ball lands afterward."
+        },
+        {
+          "id": "cue-ball-h1",
+          "difficulty": "hard",
+          "question": "A sequence of consecutive pocketed balls without a miss is called a...?",
+          "options": ["Break", "Run", "Scratch", "Safety"],
+          "correctAnswer": "Run",
+          "explanation": "A 'run' refers to consecutive successful shots, often tracked as a scoring statistic."
+        }
+      ]
+    },
+    {
+      "id": "eight-ball",
+      "name": "8-Ball",
+      "color": "Black",
+      "concept": "The Money Ball",
+      "nickname": "Game Ball",
+      "association": "Precision, intuition under pressure",
+      "facts": [
+        { "difficulty": "easy", "text": "The 8-ball is solid black and must be pocketed last in standard eight-ball." },
+        { "difficulty": "medium", "text": "Pocketing the 8-ball before clearing your group (solids or stripes) results in an automatic loss." },
+        { "difficulty": "hard", "text": "Under call-shot rules, a player must announce both the ball and the intended pocket before shooting at the 8-ball." }
+      ],
+      "questions": [
+        {
+          "id": "eight-ball-e1",
+          "difficulty": "easy",
+          "question": "What color is the 8-ball?",
+          "options": ["Red", "Black", "Yellow", "Blue-striped"],
+          "correctAnswer": "Black",
+          "explanation": "The 8-ball is solid black with a white number 8 on it."
+        },
+        {
+          "id": "eight-ball-m1",
+          "difficulty": "medium",
+          "question": "What happens if you pocket the 8-ball before clearing your group?",
+          "options": ["You win automatically", "Nothing, play continues", "You lose the game", "You get an extra turn"],
+          "correctAnswer": "You lose the game",
+          "explanation": "Pocketing the 8-ball early is one of the most common instant-loss fouls in the game."
+        },
+        {
+          "id": "eight-ball-h1",
+          "difficulty": "hard",
+          "question": "In call-shot rules, what must a player announce before shooting the 8-ball?",
+          "options": ["Only the pocket", "Only the ball", "Both the ball and the intended pocket", "Nothing — the 8-ball never needs to be called"],
+          "correctAnswer": "Both the ball and the intended pocket",
+          "explanation": "Call-shot rules require naming both which ball and which pocket for the 8-ball to count."
+        }
+      ]
+    },
+    {
+      "id": "chalk",
+      "name": "Chalk",
+      "color": "Blue",
+      "concept": "Calling Shots",
+      "nickname": "The Call",
+      "association": "Communication, self-expression",
+      "facts": [
+        { "difficulty": "easy", "text": "Chalk is applied to the cue tip before a shot to increase friction and prevent miscues." },
+        { "difficulty": "medium", "text": "In call-shot games like straight pool or standard 8-ball, a player must verbally announce which ball and pocket they intend to hit." },
+        { "difficulty": "hard", "text": "Failing to properly call a bank shot, combination, or carom can turn a legal pot into a foul, even if the ball goes in." }
+      ],
+      "questions": [
+        {
+          "id": "chalk-e1",
+          "difficulty": "easy",
+          "question": "Why do players apply chalk to the cue tip?",
+          "options": ["To make the tip look nicer", "To increase friction and prevent miscues", "To make the cue ball curve more", "To clean the felt"],
+          "correctAnswer": "To increase friction and prevent miscues",
+          "explanation": "Chalk keeps the tip from slipping off the ball, which would otherwise cause a miscue."
+        },
+        {
+          "id": "chalk-m1",
+          "difficulty": "medium",
+          "question": "In 'call-shot' games, what must a player do before attempting a shot?",
+          "options": ["Chalk their cue three times", "Announce the object ball and pocket", "Ask the opponent for permission", "Rack the remaining balls"],
+          "correctAnswer": "Announce the object ball and pocket",
+          "explanation": "Call-shot rules require declaring intent so accidental pots don't count."
+        },
+        {
+          "id": "chalk-h1",
+          "difficulty": "hard",
+          "question": "What happens if a player pockets a ball via an uncalled bank or combination shot?",
+          "options": ["It always counts as legal", "It's typically ruled a foul even though the ball went in", "The player automatically wins", "The shot is repeated"],
+          "correctAnswer": "It's typically ruled a foul even though the ball went in",
+          "explanation": "Complex shots (banks, combos, caroms) usually must be explicitly called to count."
+        }
+      ]
+    },
+    {
+      "id": "table-felt",
+      "name": "Green Felt / Table",
+      "color": "Green",
+      "concept": "The Table",
+      "nickname": "The Field",
+      "association": "Balance, composure",
+      "facts": [
+        { "difficulty": "easy", "text": "Pool table felt is traditionally green, echoing billiards' origins as a lawn game played on grass." },
+        { "difficulty": "medium", "text": "A regulation tournament table is roughly twice as long as it is wide — e.g., 9 feet by 4.5 feet." },
+        { "difficulty": "hard", "text": "The 'nap' (fiber direction) of the cloth affects how balls roll and curve, subtly favoring shots hit with the grain." }
+      ],
+      "questions": [
+        {
+          "id": "table-felt-e1",
+          "difficulty": "easy",
+          "question": "What color is traditional pool table felt?",
+          "options": ["Blue", "Red", "Green", "Purple"],
+          "correctAnswer": "Green",
+          "explanation": "Green felt is the traditional color, tracing back to billiards' roots as a lawn game."
+        },
+        {
+          "id": "table-felt-m1",
+          "difficulty": "medium",
+          "question": "A regulation tournament table is roughly what shape?",
+          "options": ["Square", "Twice as long as it is wide", "Round", "Three times as long as wide"],
+          "correctAnswer": "Twice as long as it is wide",
+          "explanation": "Standard tournament tables use a 2:1 length-to-width ratio, e.g., 9ft x 4.5ft."
+        },
+        {
+          "id": "table-felt-h1",
+          "difficulty": "hard",
+          "question": "What does the 'nap' of the cloth refer to?",
+          "options": ["The thickness of the rails", "The direction the cloth fibers lie, affecting ball roll", "The color pattern of the felt", "The number of pockets"],
+          "correctAnswer": "The direction the cloth fibers lie, affecting ball roll",
+          "explanation": "Nap direction can subtly influence how a ball rolls or curves across the table."
+        }
+      ]
+    },
+    {
+      "id": "rack",
+      "name": "Rack (Triangle)",
+      "color": "Brown/Gold",
+      "concept": "The Setup",
+      "nickname": "The Foundation Rack",
+      "association": "Confidence, personal power",
+      "facts": [
+        { "difficulty": "easy", "text": "The rack is the triangular frame used to arrange the balls tightly together before the break shot." },
+        { "difficulty": "medium", "text": "In standard 8-ball, the 8-ball must be placed in the center of the triangle when racking." },
+        { "difficulty": "hard", "text": "A tight rack, with no gaps between balls, is essential for a powerful, evenly-spreading break." }
+      ],
+      "questions": [
+        {
+          "id": "rack-e1",
+          "difficulty": "easy",
+          "question": "What tool is used to arrange the balls before a break?",
+          "options": ["The bridge", "The rack", "The chalk", "The rail"],
+          "correctAnswer": "The rack",
+          "explanation": "The rack (often a triangle) holds the balls tightly together for the break shot."
+        },
+        {
+          "id": "rack-m1",
+          "difficulty": "medium",
+          "question": "In standard 8-ball, where must the 8-ball be placed when racking?",
+          "options": ["At the front of the triangle", "At the back corner", "In the center of the triangle", "Anywhere the player chooses"],
+          "correctAnswer": "In the center of the triangle",
+          "explanation": "The 8-ball is placed in the middle row, centered in the triangle."
+        },
+        {
+          "id": "rack-h1",
+          "difficulty": "hard",
+          "question": "Why is a tight rack (no gaps between balls) important?",
+          "options": ["It looks better", "It produces a more powerful, evenly spread break", "It's required for scoring", "It has no real effect on play"],
+          "correctAnswer": "It produces a more powerful, evenly spread break",
+          "explanation": "Loose racks absorb energy unevenly, leading to weak or lopsided breaks."
+        }
+      ]
+    },
+    {
+      "id": "numbered-balls",
+      "name": "Numbered Balls (1-15)",
+      "color": "Multi/Red",
+      "concept": "Shot-Making",
+      "nickname": "The Pattern",
+      "association": "Creativity, flow",
+      "facts": [
+        { "difficulty": "easy", "text": "Standard pool uses 15 numbered balls plus the cue ball: seven solids (1-7), seven stripes (9-15), and the black 8-ball." },
+        { "difficulty": "medium", "text": "A 'combination shot' uses one object ball to strike and pocket another, requiring careful angle calculation." },
+        { "difficulty": "hard", "text": "Advanced players use 'throw' — a slight alteration of a ball's path via friction with the cue ball — to make cuts that look geometrically impossible." }
+      ],
+      "questions": [
+        {
+          "id": "numbered-balls-e1",
+          "difficulty": "easy",
+          "question": "How many object balls (excluding the cue ball) are used in standard pool?",
+          "options": ["10", "15", "21", "8"],
+          "correctAnswer": "15",
+          "explanation": "Balls numbered 1-15 make up the full object-ball set."
+        },
+        {
+          "id": "numbered-balls-m1",
+          "difficulty": "medium",
+          "question": "What is a 'combination shot'?",
+          "options": ["Hitting two balls with the cue ball at once", "Using one object ball to strike and pocket another", "Pocketing two balls in one turn by luck", "A shot that requires two players"],
+          "correctAnswer": "Using one object ball to strike and pocket another",
+          "explanation": "Combos chain the cue ball's energy through one object ball into another."
+        },
+        {
+          "id": "numbered-balls-h1",
+          "difficulty": "hard",
+          "question": "What does 'throw' refer to in advanced shot-making?",
+          "options": ["Throwing the cue stick", "A ball's path being slightly altered by friction contact with the cue ball", "Removing a ball from the table", "A penalty for a foul"],
+          "correctAnswer": "A ball's path being slightly altered by friction contact with the cue ball",
+          "explanation": "Throw is a subtle friction effect that skilled players learn to account for or exploit."
+        }
+      ]
+    },
+    {
+      "id": "cue-stick-stance",
+      "name": "Cue Stick & Bridge Hand",
+      "color": "Brown/Black",
+      "concept": "Stance & Grip",
+      "nickname": "The Foundation",
+      "association": "Grounding, stability",
+      "facts": [
+        { "difficulty": "easy", "text": "The bridge hand supports and guides the cue stick, forming a stable base for the shaft to slide through." },
+        { "difficulty": "medium", "text": "A proper stance — feet shoulder-width apart, aligned with the shot line — keeps the body still so only the arm moves during the stroke." },
+        { "difficulty": "hard", "text": "Consistent cue-ball control depends on a 'pendulum stroke' driven from the elbow, minimizing wrist movement to keep the tip traveling in a straight line." }
+      ],
+      "questions": [
+        {
+          "id": "cue-stick-e1",
+          "difficulty": "easy",
+          "question": "What is the purpose of the bridge hand?",
+          "options": ["To hold the chalk", "To support and guide the cue stick", "To rack the balls", "To signal the opponent"],
+          "correctAnswer": "To support and guide the cue stick",
+          "explanation": "The bridge hand forms a stable channel (often a 'V' or loop) that the cue slides through."
+        },
+        {
+          "id": "cue-stick-m1",
+          "difficulty": "medium",
+          "question": "A proper stance typically involves what body position?",
+          "options": ["Feet together, facing sideways", "Feet shoulder-width apart, aligned with the shot line", "Leaning fully onto the table", "Standing as far from the table as possible"],
+          "correctAnswer": "Feet shoulder-width apart, aligned with the shot line",
+          "explanation": "A balanced, aligned stance keeps the stroke consistent and repeatable."
+        },
+        {
+          "id": "cue-stick-h1",
+          "difficulty": "hard",
+          "question": "What is a 'pendulum stroke'?",
+          "options": ["A two-handed grip technique", "A stroke driven mainly from the elbow with minimal wrist movement", "A trick shot involving swinging the cue", "The motion used only for break shots"],
+          "correctAnswer": "A stroke driven mainly from the elbow with minimal wrist movement",
+          "explanation": "Pivoting from the elbow like a pendulum keeps the cue's path straight and consistent."
+        }
+      ]
+    }
+  ]
+}

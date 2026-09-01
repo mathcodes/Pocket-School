@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="dark" />
+<meta name="theme-color" content="#0a2f24" />
+<title>Pocket School — Billiards Training</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+<header class="topbar">
+  <div class="brand" id="homeBtn" role="button" tabindex="0">
+    <span class="logo">🎱</span>
+    <div>
+      <h1>Pocket School</h1>
+      <p>Adaptive billiards training</p>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat" title="Diamonds earned"><span>💎</span><b id="statDiamonds">0</b></div>
+    <div class="stat" title="Current answer streak"><span>🔥</span><b id="statStreak">0</b></div>
+    <div class="stat" title="Skills mastered"><span>🏅</span><b id="statMastered">0</b></div>
+    <button class="ghost-btn" id="feedbackTop" title="Send feedback">💬 Feedback</button>
+    <button class="ghost-btn" id="resetBtn" title="Reset all progress">Reset</button>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<!-- Dashboard template -->
+<template id="tpl-dashboard">
+  <section class="dash">
+    <div class="hero">
+      <div>
+        <h2>Choose a skill and start practicing</h2>
+        <p class="muted">Every skill is scored with a <b>SmartScore</b> from 0 to 100. Answer correctly to climb; a
+          miss costs more the higher you are. Reach 100 to master the skill.</p>
+      </div>
+      <div class="hero-actions">
+        <button class="primary-btn" id="challengeBtn">⚡ Challenge Zone</button>
+        <button class="secondary-btn" id="reviewBtn">🔁 Review Mistakes</button>
+      </div>
+    </div>
+    <div class="overall">
+      <div class="overall-bar"><div class="overall-fill" id="overallFill"></div></div>
+      <span class="muted" id="overallLabel"></span>
+    </div>
+    <div id="levels"></div>
+  </section>
+</template>
+
+<!-- Practice template -->
+<template id="tpl-practice">
+  <section class="practice">
+    <div class="practice-head">
+      <button class="ghost-btn" id="backBtn">← Back</button>
+      <div class="practice-title">
+        <h2 id="pTitle"></h2>
+        <p class="muted" id="pSub"></p>
+      </div>
+      <div class="smartscore" id="smartScore">
+        <div class="ss-label">SmartScore</div>
+        <div class="ss-value" id="ssValue">0</div>
+        <div class="ss-bar"><div class="ss-fill" id="ssFill"></div></div>
+      </div>
+    </div>
+
+    <div class="qcard" id="qcard">
+      <div class="qmeta">
+        <span class="pill" id="qTier"></span>
+        <span class="muted" id="qCount"></span>
+      </div>
+      <h3 class="qtext" id="qText"></h3>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback" hidden>
+        <div class="fb-head" id="fbHead"></div>
+        <p id="fbText"></p>
+        <button class="primary-btn" id="nextBtn">Continue →</button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<!-- Mastery template -->
+<template id="tpl-done">
+  <section class="done">
+    <div class="trophy" id="doneIcon">🏆</div>
+    <h2 id="doneTitle"></h2>
+    <p class="muted" id="doneSub"></p>
+    <div class="done-stats" id="doneStats"></div>
+    <div class="hero-actions">
+      <button class="primary-btn" id="doneHome">Back to skills</button>
+      <button class="secondary-btn" id="doneAgain">Practice again</button>
+    </div>
+  </section>
+</template>
+
+<button id="toTop" class="to-top" type="button" aria-label="Back to top" hidden>
+  <span aria-hidden="true">↑</span>
+</button>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <strong>🎱 Pocket School</strong>
+      <p class="muted" id="footerBlurb">Adaptive billiards training</p>
+    </div>
+    <nav class="footer-links" aria-label="Footer">
+      <button class="link-btn" id="feedbackLink" type="button">💬 Send feedback</button>
+      <button class="link-btn" id="resourcesLink" type="button">📚 Resources</button>
+      <a class="link-btn" id="githubLink" href="#" target="_blank" rel="noopener noreferrer">⭐ GitHub</a>
+      <a class="link-btn" href="mailto:jonpchristie@gmail.com?subject=Pocket%20School%20—%20hello">✉️ Contact</a>
+    </nav>
+    <p class="copyright">© <span id="year"></span> Jon Christie · Pocket School. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- Feedback dialog -->
+<div class="modal" id="feedbackModal" role="dialog" aria-modal="true" aria-labelledby="fbTitle" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3 id="fbTitle">💬 Send feedback</h3>
+      <button class="icon-btn" type="button" data-close aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="muted">Found a wrong answer, want a new skill, or spotted a bug? Send it straight to me from here.</p>
+      <label for="fbTopic">Topic</label>
+      <select id="fbTopic">
+        <option>Question correction</option>
+        <option>New question or skill idea</option>
+        <option>Bug report</option>
+        <option>General feedback</option>
+      </select>
+      <label for="fbName">Your name (optional)</label>
+      <input id="fbName" type="text" autocomplete="name" placeholder="Optional" />
+      <label for="fbMessage">Comments</label>
+      <textarea id="fbMessage" rows="5" placeholder="What should change, and where did you see it?"></textarea>
+      <p class="muted tiny" id="fbContext"></p>
+      <p class="fb-status" id="fbStatus" role="status" hidden></p>
+      <div class="fb-fallback" id="fbFallback" hidden>
+        <p class="tiny"><b>Deliver it now:</b> your note is saved on this device, and these options carry the
+          identical message.</p>
+        <div class="fb-fallback-actions">
+          <a class="link-btn" id="fbGmail" href="#" target="_blank" rel="noopener noreferrer">Open in Gmail</a>
+          <a class="link-btn" id="fbOutlook" href="#" target="_blank" rel="noopener noreferrer">Open in Outlook</a>
+          <a class="link-btn" id="fbMailto" href="#">Mail app</a>
+          <button class="link-btn" type="button" id="fbCopy2">Copy message</button>
+        </div>
+        <p class="tiny muted">Or email <b>jonpchristie@gmail.com</b> directly.</p>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="secondary-btn" type="button" id="fbDownload" hidden>Download saved feedback</button>
+      <button class="secondary-btn" type="button" id="fbCopy">Copy</button>
+      <button class="primary-btn" type="button" id="fbSend">Send feedback</button>
+    </div>
+  </div>
+</div>
+
+<!-- Resources dialog -->
+<div class="modal" id="resourcesModal" role="dialog" aria-modal="true" aria-labelledby="resTitle" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3 id="resTitle">📚 Resources & references</h3>
+      <button class="icon-btn" type="button" data-close aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="muted">Questions and explanations in this app were written from the following sources. They are
+        also the best places to go deeper.</p>
+      <ul class="res-list" id="resList"></ul>
+      <p class="muted tiny">Pocket School is an independent study aid and is not affiliated with, endorsed by, or
+        sponsored by any of the organizations listed above.</p>
+    </div>
+    <div class="modal-foot">
+      <button class="primary-btn" type="button" data-close>Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/data-skills.js"></script>
+<script src="js/data-questions-1.js"></script>
+<script src="js/data-questions-2.js"></script>
+<script src="js/data-questions-3.js"></script>
+<script src="js/store.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

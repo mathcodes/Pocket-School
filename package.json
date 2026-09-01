@@ -1,0 +1,12 @@
+{
+  "name": "pocket-school-billiards",
+  "version": "1.0.0",
+  "description": "Adaptive billiards training app with an IXL-style SmartScore.",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "feedback": "node -e \"const f=require('./data/feedback.json');console.log(f.length+' entries');f.forEach(e=>console.log('\\n['+e.receivedAt+'] '+e.topic+' — '+(e.name||'anonymous')+'\\n'+e.message+'\\n'+e.context))\""
+  },
+  "engines": { "node": ">=18" },
+  "license": "UNLICENSED"
+}
